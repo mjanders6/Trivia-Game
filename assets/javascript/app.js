@@ -54,4 +54,4 @@ const quizBuilder = _ => {}
 const dispResults = _ => {}
 
 // add event listener to process the results
-
+submitButton.addEventListener('click', dispResults)
