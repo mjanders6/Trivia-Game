@@ -101,7 +101,10 @@ function showResults() {
         });
 
     // show number of correct answers out of total
-    resultsContainer.innerHTML = numCorrect + ' out of ' + collection.length;
+    resultsContainer.innerHTML = `You got ${numCorrect} out of ${collection.length} correct`;
+    time = 0
+    document.querySelector('#display').textContent = compTime()
+    clearInterval(myTimer)
 }
 
 // add event listener to process the results
@@ -111,7 +114,7 @@ function showResults() {
 
 // })
 
-let time = 5
+let time = 61
 let isRun = false
 let myTimer
 
