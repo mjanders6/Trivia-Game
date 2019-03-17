@@ -35,16 +35,19 @@ const quesDB = () => {
                     const answers = [];
 
                     // and for each available answer...
-                    for (letter in curQues.answer) {
+                    for (val in curQues.answer) {
 
                         // ...add an HTML radio button
                         answers.push(
-                        `<li>
-                            <input type="radio" name="question${quesNum}" value="${letter}">
-                            ${curQues.answer[letter]}
+                            `<li>
+                            <input type="radio" name="question${quesNum}" value="${val}">
+                            ${curQues.answer[val]}
                         </li>`
                         );
                     }
+
+                    // sort the answers so the user doesnt find the pattern 
+                    answers.sort(function () { return 0.5 - Math.random() })
 
                     // add this question and its answers to the output
                     output.push(
@@ -65,13 +68,47 @@ const quesDB = () => {
 // show the quiz
 quesDB()
 
+function showResults() {
 
+    // gather answer containers from our quiz
+    const answerContainers = setQuiz.querySelectorAll('.answers');
+
+    // keep track of user's answers
+    let numCorrect = 0;
+
+    // for each question...
+    collection.forEach(
+        (currentQuestion, questionNumber) => {
+
+            // find selected answer
+            const answerContainer = answerContainers[questionNumber];
+            const selector = 'input[name=question' + questionNumber + ']:checked';
+            const userAnswer = collection[questionNumber].answer[(answerContainer.querySelector(selector) || {}).value];
+
+            // if answer is correct
+            if (userAnswer === currentQuestion.correctAnswer) {
+                // add to the number of correct answers
+                numCorrect++;
+
+                // color the answers green
+                answerContainers[questionNumber].style.color = 'lightgreen';
+            }
+            // if answer is wrong or blank
+            else {
+                // color the answers red
+                answerContainers[questionNumber].style.color = 'red';
+            }
+        });
+
+    // show number of correct answers out of total
+    resultsContainer.innerHTML = numCorrect + ' out of ' + collection.length;
+}
 
 // add event listener to process the results
-document.addEventListener('click', e => {
-    console.log(e.path);
-    // console.log(e.path[1].innerText);
+// document.addEventListener('click', e => {
+//     console.log(e.path);
+//     console.log(e.path[1].innerText);
 
-})
+// })
 
-// submitButton.addEventListener('click', showResults);
+submitButton.addEventListener('click', showResults);
