@@ -1,52 +1,30 @@
+const setQuiz = document.getElementById('quizInfo');
+const resultsContainer = document.getElementById('quizResults');
+const submitButton = document.getElementById('submit');
+let quesObj, x, i
+let collection = []
+
+
 // layout the quiz
-const quizBuilder = () => {
-    fetch(`https://opentdb.com/api.php?amount=15&category=20&difficulty=medium`)
+const quesDB = _ => {
+    fetch(`https://opentdb.com/api.php?amount=5&category=29&difficulty=medium`)
         .then(r => r.json())
         .then(r => {
-            const setQuiz = document.getElementById('quizInfo');
-            // initialize the array that will hold the question/answer group
-            const quesGroup = []
             // object for question sets from API
-            const quesObj = r.results
-            // loop through the questions API
-            quesObj.forEach(
-                // curQues/value :quesNum/index
-                (curQues, quesNum) => {
-                    // initialize the answer.
-                    let answers = []
-                    // loop through the incorrect.answers array, store the input as an unordered list, as a radio button
-                    for (val in curQues.incorrect_answers) {
-                        answers.push(
-                        `<li>
-                            <input type="radio" name="question${quesNum}" value="${val}">
-                            ${curQues.incorrect_answers[val]}
-                        </li>`
-                        )
-                    }
-                    // the API has the answer outside of the incorrect.answers array and needs to be pushed into the array
-                    answers.push(
-                        `<li>
-                            <input type="radio" name="question${quesNum}" value="${parseInt(val) + 1}">
-                            ${curQues.correct_answer}
-                        </li>`
-                    )
-                    // sort the answers so the user doesnt find the pattern 
-                    answers.sort(function () { return 0.5 - Math.random() })
-                    
-                    // group the questions and answers into an array
-                    quesGroup.push(
-                        `<div class="question"> ${curQues.question} </div>
-                        <div class="answers"> ${answers.join('')} </div>`
-                    );
-                })
-            // join the group and push it into the page
-            setQuiz.innerHTML = quesGroup.join('');
-            // r.results.forEach(ques => {
-            //     let quesElem = document.createElement('h5')
-            //     quesElem.textContent = ques.question
-            //     document.querySelector('#quizInfo').append(quesElem)
+            // initialize the question object
+            quesObj = r.results
+            console.log(quesObj);
 
-            // })
+            for (let x = 0; x < quesObj.length; x++) {
+                collection[x] = new Object()
+                collection[x].question = quesObj[x].question
+                collection[x].answer = new Object()
+                for (let i = 0; i < quesObj[x].incorrect_answers.length; i++) {
+                    collection[x].answer[i] = quesObj[x].incorrect_answers[i]
+                }
+                collection[x].answer[quesObj[x].incorrect_answers.length] = quesObj[x].correct_answer
+                collection[x].correctAnswer = quesObj[x].correct_answer
+            }
 
         })
         .then(e => {
@@ -54,61 +32,15 @@ const quizBuilder = () => {
         })
 }
 // show the quiz
-quizBuilder()
-
-// Set the question data for the quiz
-// const questionData = [
-//     {
-//         question: '',
-//         answers: {
-//             A: '',
-//             B: '',
-//             C: ''
-//         },
-//         correctAnswer: ''
-//     },
-//     {
-//         question: '',
-//         answers: {
-//             A: '',
-//             B: '',
-//             C: ''
-//         },
-//         correctAnswer: ''
-//     },
-//     {
-//         question: '',
-//         answers: {
-//             A: '',
-//             B: '',
-//             C: ''
-//         },
-//         correctAnswer: ''
-//     },
-//     {
-//         question: '',
-//         answers: {
-//             A: '',
-//             B: '',
-//             C: ''
-//         },
-//         correctAnswer: ''
-//     },
-//     {
-//         question: '',
-//         answers: {
-//             A: '',
-//             B: '',
-//             C: ''
-//         },
-//         correctAnswer: ''
-//     }
-// ]
+// quizBuilder()
 
 
-
-// show the results to the quiz
-const dispResults = _ => { }
 
 // add event listener to process the results
-submitButton.addEventListener('click', dispResults)
+// document.addEventListener('click', e => {
+//     console.log(e.path);
+//     console.log(e.path[1].innerText);
+
+// })
+
+// submitButton.addEventListener('click', showResults);
