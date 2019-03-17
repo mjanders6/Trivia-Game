@@ -111,4 +111,34 @@ function showResults() {
 
 // })
 
+let time = 5
+let isRun = false
+let myTimer
+
+const compTime = _ => {
+    let minutes = Math.floor(time / 60)
+    let seconds = time % 60
+    minutes = `${minutes}`.length < 2 ? `0${minutes}` : `${minutes.toString()[0]}${minutes.toString()[1]}`
+    seconds = `${seconds}`.length < 2 ? `0${seconds}` : `${seconds.toString()[0]}${seconds.toString()[1]}`
+    return `${minutes}:${seconds}`
+}
+
+const starter = _ => {
+    if (!isRun) {
+        isRun = true
+        myTimer = setInterval(() => {
+            time--
+            document.querySelector('#display').textContent = compTime()
+            if (time < 0) {
+                time = 0
+                document.querySelector('#display').textContent = compTime()
+                clearInterval(myTimer)
+                showResults()
+            }
+        }, 1000)
+    }
+}
+
+starter()
+
 submitButton.addEventListener('click', showResults);
