@@ -4,6 +4,7 @@ const submitButton = document.getElementById('submit');
 let quesObj, x, i
 let collection = []
 
+// document.getElementById('#startPage').innerHTML = "Lets Get Started"
 
 // layout the quiz
 const quesDB = () => {
@@ -114,10 +115,12 @@ function showResults() {
 
 // })
 
+// set time to 60 seconds
 let time = 61
 let isRun = false
 let myTimer
 
+// function to display the timer. 
 const compTime = _ => {
     let minutes = Math.floor(time / 60)
     let seconds = time % 60
