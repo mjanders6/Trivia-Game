@@ -8,7 +8,6 @@ const quizBuilder = () => {
             const quesGroup = []
             // object for question sets from API
             const quesObj = r.results
-
             // loop through the questions API
             quesObj.forEach(
                 // curQues/value :quesNum/index
