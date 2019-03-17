@@ -3,7 +3,7 @@ const quizBuilder = () => {
     fetch(`https://opentdb.com/api.php?amount=15&category=20&difficulty=medium`)
         .then(r => r.json())
         .then(r => {
-            const quizContainer = document.getElementById('quizInfo');
+            const setQuiz = document.getElementById('quizInfo');
             // initialize the array that will hold the question/answer group
             const quesGroup = []
             // object for question sets from API
@@ -41,7 +41,7 @@ const quizBuilder = () => {
                     );
                 })
             // join the group and push it into the page
-            quizContainer.innerHTML = quesGroup.join('');
+            setQuiz.innerHTML = quesGroup.join('');
             // r.results.forEach(ques => {
             //     let quesElem = document.createElement('h5')
             //     quesElem.textContent = ques.question
