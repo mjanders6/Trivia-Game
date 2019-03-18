@@ -14,7 +14,7 @@ const quesDB = () => {
             // object for question sets from API
             // initialize the question object
             quesObj = r.results
-
+            // Create an array of objects to store questions and answers
             for (let x = 0; x < quesObj.length; x++) {
                 collection[x] = new Object()
                 collection[x].answer = new Object()
@@ -28,17 +28,15 @@ const quesDB = () => {
 
             // we'll need a place to store the HTML output
             const output = [];
-            // for each question...
+            // loop through the array created for the questions
             collection.forEach(
                 (curQues, quesNum) => {
-
                     // we'll want to store the list of answer choices
                     const answers = [];
-
-                    // and for each available answer...
+                    // loop through the answers
                     for (val in curQues.answer) {
 
-                        // ...add an HTML radio button
+                        // create a radio button for each answer
                         answers.push(
                             `<li>
                             <input type="radio" name="question${quesNum}" value="${val}">
@@ -50,14 +48,14 @@ const quesDB = () => {
                     // sort the answers so the user doesnt find the pattern 
                     answers.sort(function () { return 0.5 - Math.random() })
 
-                    // add this question and its answers to the output
+                    // add the question and answers to the output
                     output.push(
                         `<div class="question"> ${curQues.question} </div>
                         <div class="answers"> ${answers.join('')} </div>`
                     );
                 }
             );
-            // finally combine our output list into one string of HTML and put it on the page
+            // combine the question and answer divs 
             setQuiz.innerHTML = output.join('');
 
         })
@@ -69,7 +67,7 @@ const quesDB = () => {
 // show the quiz
 quesDB()
 
-function showResults() {
+function dispResults() {
 
     // gather answer containers from our quiz
     const answerContainers = setQuiz.querySelectorAll('.answers');
@@ -90,45 +88,31 @@ function showResults() {
             if (userAnswer === currentQuestion.correctAnswer) {
                 // add to the number of correct answers
                 numCorrect++;
-
-                // color the answers green
-                answerContainers[questionNumber].style.color = 'lightgreen';
-            }
-            // if answer is wrong or blank
-            else {
-                // color the answers red
-                answerContainers[questionNumber].style.color = 'red';
             }
         });
 
     // show number of correct answers out of total
     resultsContainer.innerHTML = `You got ${numCorrect} out of ${collection.length} correct`;
+    // stop the timer when the function is run
     time = 0
     document.querySelector('#display').textContent = compTime()
     clearInterval(myTimer)
 }
 
-// add event listener to process the results
-// document.addEventListener('click', e => {
-//     console.log(e.path);
-//     console.log(e.path[1].innerText);
-
-// })
-
-// set time to 60 seconds
+// set time to 60 seconds. +1 makes it an even number
 let time = 61
 let isRun = false
 let myTimer
 
-// function to display the timer. 
+// function to display calculate the timer. 
 const compTime = _ => {
-    let minutes = Math.floor(time / 60)
+    let minutes = Math.floor( time / 60)
     let seconds = time % 60
     minutes = `${minutes}`.length < 2 ? `0${minutes}` : `${minutes.toString()[0]}${minutes.toString()[1]}`
     seconds = `${seconds}`.length < 2 ? `0${seconds}` : `${seconds.toString()[0]}${seconds.toString()[1]}`
     return `${minutes}:${seconds}`
 }
-
+// function to start the count down timer. 
 const starter = _ => {
     if (!isRun) {
         isRun = true
@@ -139,7 +123,7 @@ const starter = _ => {
                 time = 0
                 document.querySelector('#display').textContent = compTime()
                 clearInterval(myTimer)
-                showResults()
+                dispResults()
             }
         }, 1000)
     }
@@ -147,4 +131,4 @@ const starter = _ => {
 
 starter()
 
-submitButton.addEventListener('click', showResults);
+submitButton.addEventListener('click', dispResults);

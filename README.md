@@ -1,9 +1,9 @@
 # 1. Trivia-Game
-
+Comic book trivia questions. 
 
 
 # 2. API Information
-The API is called from Open Trivia at <https://opentdb.com>
+The API is called from Open Trivia at <https://opentdb.com>.
 - category: "Mythology"
 - correct_answer: "Participating in cannibalism."
 - difficulty: "medium"
