@@ -77,15 +77,15 @@ function dispResults() {
 
     // for each question...
     collection.forEach(
-        (currentQuestion, questionNumber) => {
+        (currQues, quesNum) => {
 
             // find selected answer
-            const answerContainer = answerContainers[questionNumber];
-            const selector = 'input[name=question' + questionNumber + ']:checked';
-            const userAnswer = collection[questionNumber].answer[(answerContainer.querySelector(selector) || {}).value];
+            const answerContainer = answerContainers[quesNum];
+            const selector = 'input[name=question' + quesNum + ']:checked';
+            const userAnswer = collection[quesNum].answer[(answerContainer.querySelector(selector) || {}).value];
 
             // if answer is correct
-            if (userAnswer === currentQuestion.correctAnswer) {
+            if (userAnswer === currQues.correctAnswer) {
                 // add to the number of correct answers
                 numCorrect++;
             }
