@@ -131,4 +131,4 @@ const starter = _ => {
 
 starter()
 
-submitButton.addEventListener('click', dispResults);
+submitButton.addEventListener('click', dispResults)
