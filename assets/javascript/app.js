@@ -11,13 +11,10 @@ let myTimer
 
 // layout the quiz
 const quesDB = () => {
-
-
     fetch(`https://opentdb.com/api.php?amount=5&category=29&difficulty=medium`)
         .then(r => r.json())
         .then(r => {
             // object for question sets from API
-            // initialize the question object
             quesObj = r.results
             // Create an array of objects to store questions and answers
             for (let x = 0; x < quesObj.length; x++) {
@@ -30,15 +27,10 @@ const quesDB = () => {
                 quizDB[x].answer[quesObj[x].incorrect_answers.length] = quesObj[x].correct_answer
                 quizDB[x].correctAnswer = quesObj[x].correct_answer
             }
-
-            // we'll need a place to store the HTML output
             const output = [];
-            // loop through the array created for the questions
             quizDB.forEach(
                 (curQues, quesNum) => {
-                    // we'll want to store the list of answer choices
                     const answers = [];
-                    // loop through the answers
                     for (val in curQues.answer) {
 
                         // create a radio button for each answer
@@ -46,10 +38,9 @@ const quesDB = () => {
                             `<li>
                             <input type="radio" name="question${quesNum}" value="${val}">
                             ${curQues.answer[val]}
-                        </li>`
+                            </li>`
                         );
                     }
-
                     // sort the answers so the user doesnt find the pattern 
                     answers.sort(function () { return 0.5 - Math.random() })
 
@@ -62,40 +53,30 @@ const quesDB = () => {
             );
             // combine the question and answer divs 
             setQuiz.innerHTML = output.join('');
-
         })
         .catch(e => {
             console.error(e);
         })
 }
-
 // show the quiz
 quesDB()
 
 const dispResults = () => {
-
-    // gather answer containers from our quiz
-    const answerContainers = setQuiz.querySelectorAll('.answers');
-
-    // keep track of user's answers
+    // gather answer from our quiz
+    const gatherAnswers = setQuiz.querySelectorAll('.answers');
     let numCorrect = 0;
 
-    // for each question...
     quizDB.forEach(
         (currQues, quesNum) => {
-
             // find selected answer
-            const answerContainer = answerContainers[quesNum];
+            const answerContainer = gatherAnswers[quesNum];
             const selector = 'input[name=question' + quesNum + ']:checked';
             const userAnswer = quizDB[quesNum].answer[(answerContainer.querySelector(selector) || {}).value];
-
             // if answer is correct
             if (userAnswer === currQues.correctAnswer) {
-                // add to the number of correct answers
                 numCorrect++;
             }
         });
-
     // show number of correct answers out of total
     resCont.innerHTML = `You got ${numCorrect} out of ${quizDB.length} correct`;
     // stop the timer when the function is run
@@ -103,8 +84,6 @@ const dispResults = () => {
     document.querySelector('#display').textContent = compTime()
     clearInterval(myTimer)
 }
-
-
 // function to display timer. 
 const compTime = _ => {
     let minutes = Math.floor(time / 60)
@@ -129,6 +108,5 @@ const starter = _ => {
         }, 1000)
     }
 }
-
 starter()
 submitButton.addEventListener('click', dispResults)
