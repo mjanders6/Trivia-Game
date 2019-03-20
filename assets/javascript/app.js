@@ -1,13 +1,18 @@
 const setQuiz = document.getElementById('quizInfo');
-const resultsContainer = document.getElementById('quizResults');
+const resCont = document.getElementById('quizResults');
 const submitButton = document.getElementById('submit');
-let quesObj, x, i
-let collection = []
 
-// document.getElementById('#startPage').innerHTML = "Lets Get Started"
+let quesObj, x, i
+let quizDB = []
+// set time to 60 seconds. +1 makes it an even number
+let time = 61
+let isRun = false
+let myTimer
 
 // layout the quiz
 const quesDB = () => {
+
+
     fetch(`https://opentdb.com/api.php?amount=5&category=29&difficulty=medium`)
         .then(r => r.json())
         .then(r => {
@@ -16,20 +21,20 @@ const quesDB = () => {
             quesObj = r.results
             // Create an array of objects to store questions and answers
             for (let x = 0; x < quesObj.length; x++) {
-                collection[x] = new Object()
-                collection[x].answer = new Object()
-                collection[x].question = quesObj[x].question
+                quizDB[x] = new Object()
+                quizDB[x].answer = new Object()
+                quizDB[x].question = quesObj[x].question
                 for (let i = 0; i < quesObj[x].incorrect_answers.length; i++) {
-                    collection[x].answer[i] = quesObj[x].incorrect_answers[i]
+                    quizDB[x].answer[i] = quesObj[x].incorrect_answers[i]
                 }
-                collection[x].answer[quesObj[x].incorrect_answers.length] = quesObj[x].correct_answer
-                collection[x].correctAnswer = quesObj[x].correct_answer
+                quizDB[x].answer[quesObj[x].incorrect_answers.length] = quesObj[x].correct_answer
+                quizDB[x].correctAnswer = quesObj[x].correct_answer
             }
 
             // we'll need a place to store the HTML output
             const output = [];
             // loop through the array created for the questions
-            collection.forEach(
+            quizDB.forEach(
                 (curQues, quesNum) => {
                     // we'll want to store the list of answer choices
                     const answers = [];
@@ -67,7 +72,7 @@ const quesDB = () => {
 // show the quiz
 quesDB()
 
-function dispResults() {
+const dispResults = () => {
 
     // gather answer containers from our quiz
     const answerContainers = setQuiz.querySelectorAll('.answers');
@@ -76,13 +81,13 @@ function dispResults() {
     let numCorrect = 0;
 
     // for each question...
-    collection.forEach(
+    quizDB.forEach(
         (currQues, quesNum) => {
 
             // find selected answer
             const answerContainer = answerContainers[quesNum];
             const selector = 'input[name=question' + quesNum + ']:checked';
-            const userAnswer = collection[quesNum].answer[(answerContainer.querySelector(selector) || {}).value];
+            const userAnswer = quizDB[quesNum].answer[(answerContainer.querySelector(selector) || {}).value];
 
             // if answer is correct
             if (userAnswer === currQues.correctAnswer) {
@@ -92,21 +97,17 @@ function dispResults() {
         });
 
     // show number of correct answers out of total
-    resultsContainer.innerHTML = `You got ${numCorrect} out of ${collection.length} correct`;
+    resCont.innerHTML = `You got ${numCorrect} out of ${quizDB.length} correct`;
     // stop the timer when the function is run
     time = 0
     document.querySelector('#display').textContent = compTime()
     clearInterval(myTimer)
 }
 
-// set time to 60 seconds. +1 makes it an even number
-let time = 61
-let isRun = false
-let myTimer
 
-// function to display calculate the timer. 
+// function to display timer. 
 const compTime = _ => {
-    let minutes = Math.floor( time / 60)
+    let minutes = Math.floor(time / 60)
     let seconds = time % 60
     minutes = `${minutes}`.length < 2 ? `0${minutes}` : `${minutes.toString()[0]}${minutes.toString()[1]}`
     seconds = `${seconds}`.length < 2 ? `0${seconds}` : `${seconds.toString()[0]}${seconds.toString()[1]}`
@@ -130,5 +131,4 @@ const starter = _ => {
 }
 
 starter()
-
 submitButton.addEventListener('click', dispResults)
