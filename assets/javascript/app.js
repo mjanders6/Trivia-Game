@@ -64,6 +64,7 @@ quesDB()
 const dispResults = () => {
     // gather answer from our quiz
     const gatherAnswers = setQuiz.querySelectorAll('.answers');
+    console.log(gatherAnswers)
     let numCorrect = 0;
 
     quizDB.forEach(
