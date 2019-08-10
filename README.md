@@ -1,5 +1,6 @@
 # 1. Trivia-Game
 [Deployment](https://mjanders6.github.io/Trivia-Game/) | https://mjanders6.github.io/Trivia-Game/
+
 Comic book trivia questions. How well do you know your comics? Take the quiz and see how much you know. DOnt forget, this is timed so you have to be on your game!
 
 # 2. App Features:
